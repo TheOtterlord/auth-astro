@@ -24,30 +24,19 @@ Next you need to [add the integration to your astro config](https://docs.astro.b
 
 ## Configuration
 
-Your [auth configuartion](https://authjs.dev/getting-started/oauth-tutorial#creating-the-server-config) needs to be passed to the integration function call.
+Create your [auth configuartion](https://authjs.dev/getting-started/oauth-tutorial#creating-the-server-config) file in the root of your project.
 
-For example:
-```ts title="astro.config.ts"
-import { defineConfig } from 'astro/config';
-import node from '@astrojs/node';
-import auth from 'auth-astro'
+```ts title="auth.config.ts"
 import GitHub from '@auth/core/providers/github'
 
-export default defineConfig({
-  output: 'server',
-  adapter: node({
-    mode: 'standalone'
-  }),
-  integrations: [auth({
-    providers: [
-      //@ts-expect-error issue https://github.com/nextauthjs/next-auth/issues/6174
-      GitHub({
-        clientId: import.meta.env.GITHUB_ID,
-        clientSecret: import.meta.env.GITHUB_SECRET,
-      }),
-    ]
-  })]
-})
+export default {
+  providers: [
+    GitHub({
+      clientId: import.meta.env.GITHUB_ID,
+      clientSecret: import.meta.env.GITHUB_SECRET,
+    }),
+  ]
+}
 ```
 
 Some OAuth Providers request a callback URL be submitted alongside requesting a Client ID, and Client Secret. The callback URL used by the providers must be set to the following, unless you override the prefix field in the configuration:
